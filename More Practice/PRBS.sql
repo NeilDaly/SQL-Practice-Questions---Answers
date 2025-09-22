@@ -245,8 +245,83 @@ FROM
 WHERE
     dept_id IN (SELECT dept_id FROM employees WHERE salary > 100000)
 
+
+/*
+    PRB21: Find employees who earn the maximum salary in their department.
+*/
+
+SELECT
+    emp_name,
+    salary,
+    dept_id
+FROM
+    employees e
+WHERE
+    salary = (SELECT MAX(salary) FROM Employees WHERE dept_id = e.dept_id)
+
+
+/*
+    PRB22: Find departments where the average salary is above the overall company average.
+*/
+
+SELECT
+    dept_name
+FROM
+    departments d
+WHERE
+    (SELECT AVG(salary) FROM employees WHERE dept_id = d.dept_id) 
+    > (SELECT AVG(salary) FROM employees)
+
+/*
+    PRB23: List employees hired before the earliest hire date in the Marketing department.
+*/
+
+SELECT
+    emp_name,
+    hire_date
+FROM
+    employees
+WHERE
+    hire_date < (SELECT MIN(hire_date) FROM employees WHERE dept_id = 2)
+
+
+/*
+    PRB24: Find departments that have fewer employees than the Engineering department.
+*/
+
+SELECT
+    dept_name
+FROM
+    departments d
+WHERE
+    (SELECT COUNT(*) FROM employees WHERE dept_id = d.dept_id)
+    < (SELECT COUNT(*) FROM employees WHERE dept_id = 3)
+
+/*
+    PRB25: Find employees whose salary is above the median salary of the company.
+*/
+
+SELECT
+    emp_name,
+    salary
+FROM
+    employees
+WHERE
+    salary > 
+    (SELECT AVG(salary) FROM ( SELECT salary FROM employees ORDER BY salary LIMIT 2 - (SELECT COUNT(*) FROM Employees) % 2
+    OFFSET (SELECT (COUNT(*) - 1) / 2 FROM Employees)
+    ) t
+ )
+
+
+
+/*
+    PRB : 
+*/
+
 SELECT
 FROM
+
 
 SELECT * FROM employees;
 SELECT * FROM departments;
