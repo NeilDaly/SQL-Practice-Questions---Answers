@@ -5,20 +5,20 @@
     And order by the job postings count from highest to lowest.
 */
 
-SELECT 
-    Companies.name,
-    COUNT(Jobs.job_id) AS job_postings
+SELECT
+    companies.name AS company_name,
+    COUNT(jobs.job_id) AS posting_count
 FROM
-    job_postings_fact AS Jobs
+    company_dim AS companies
 INNER JOIN
-    company_dim AS Companies
-    ON Companies.company_id = Jobs.company_id
+    job_postings_fact AS jobs
+    ON companies.company_id = jobs.company_id
 WHERE
-    Jobs.job_health_insurance IS TRUE AND
-    EXTRACT(QUARTER FROM job_posted_date) = 2
+    jobs.job_health_insurance IS TRUE AND
+    EXTRACT(QUARTER FROM jobs.job_posted_date) = 2
 GROUP BY
-    Companies.name
+    companies.name
 HAVING
-    COUNT(Jobs.job_id) > 0
+    COUNT(jobs.job_id) >= 1
 ORDER BY
-    job_postings DESC
+    posting_count DESC
